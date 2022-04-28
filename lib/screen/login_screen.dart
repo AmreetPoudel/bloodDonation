@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:blood/screen/home_screen.dart';
 import 'package:blood/screen/registration_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -68,7 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
       borderRadius: BorderRadius.circular(50),
       color: Colors.redAccent,
       child: MaterialButton(
-        onPressed: (){},
+        onPressed: (){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+
+        },
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 15),
         minWidth: MediaQuery.of(context).size.width,
         child: const Text(
