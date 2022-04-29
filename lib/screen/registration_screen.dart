@@ -1,4 +1,10 @@
+import 'package:blood/model/user_model.dart';
+import 'package:blood/screen/home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import "/model/user_model.dart";
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -8,6 +14,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
   //form key
   final _formkey = GlobalKey<FormState>();
 //editing controller
@@ -26,6 +33,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       textInputAction: TextInputAction.next,
       onSaved: (value) {
         firstNameEditingContoller.text = value.toString();
+      },
+      validator: (value) {
+        RegExp regex = RegExp(r'^.{3,}$');
+        if (value!.isEmpty) {
+          return " first name cannot be empty";
+        }
+        if (!regex.hasMatch(value)) {
+          return " atleast 3 characters long";
+        }
       },
       autofocus: false,
       decoration: InputDecoration(
@@ -46,6 +62,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       onSaved: (value) {
         secondNameEditingContoller.text = value.toString();
       },
+      validator: (value) {
+        if (value!.isEmpty) {
+          return " second name cannot be empty";
+        }
+        return null;
+      },
       autofocus: false,
       decoration: InputDecoration(
           hintText: "lastName",
@@ -65,6 +87,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         emailEditingContoller.text = value.toString();
       },
       autofocus: false,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "email cannot be empty";
+        }
+
+        // copied from code grapper regex for email validation with reqex
+        Pattern pattern =
+            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+            r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+            r"{0,253}[a-zA-Z0-9])?)*$";
+        RegExp regex = RegExp(pattern.toString());
+        if (!regex.hasMatch(value)) {
+          return 'Enter a valid email address';
+        } else {
+          return null;
+        }
+
+        // if (!RegExp("^[a-zA-z0-9+_.-]+@[a-zA-Z09.-]+.[a-z]").hasMatch(value)) {
+        //   return "Enter a valid email address";
+        // }
+        // return null;
+      },
       decoration: InputDecoration(
           hintText: "Email",
           prefixIcon: const Icon(Icons.mail),
@@ -83,6 +127,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         passwordEditingContoller.text = value.toString();
       },
       obscureText: true,
+      validator: (value) {
+        RegExp regex = RegExp(r'^.{6,}$');
+        if (value!.isEmpty) {
+          return " password required for login";
+        }
+        if (!regex.hasMatch(value)) {
+          return " atleast 6 characters long";
+        }
+      },
       decoration: InputDecoration(
           hintText: "Password",
           prefixIcon: const Icon(Icons.vpn_key_outlined),
@@ -101,6 +154,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         conformPasswordEditingContoller.text = value.toString();
       },
       obscureText: true,
+      //validator for conform password
+      validator: (value) {
+        if (conformPasswordEditingContoller.text !=
+            passwordEditingContoller.text) {
+          return "password does not match";
+        }
+        return null;
+      },
+
       decoration: InputDecoration(
           hintText: "ConformPassword",
           prefixIcon: const Icon(Icons.vpn_key_outlined),
@@ -117,7 +179,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       borderRadius: BorderRadius.circular(50),
       color: Colors.redAccent,
       child: MaterialButton(
-        onPressed: () {},
+        onPressed: () {
+            signUp(emailEditingContoller.text, passwordEditingContoller.text);
+
+        },
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 15),
         minWidth: MediaQuery.of(context).size.width,
         child: const Text(
@@ -192,5 +257,59 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
+  }
+
+  void signUp(String email, String password) async {
+    if (_formkey.currentState!.validate()) {
+      await _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value)=>{ postDetailsToFirestore()})
+          .catchError((e) => {
+                Fluttertoast.showToast(
+                    msg: e.toString(),
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0)
+              });
+    }
+  }
+
+  postDetailsToFirestore() async {
+    //calling firebase
+    //calling user model
+    //sending data to firebase
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = _auth.currentUser;
+
+    UserModel userModel = UserModel();
+
+    //writing all the values to constructor of user model so that we can send them to firebase
+    userModel.email = user!.email;
+    userModel.firstName = firstNameEditingContoller.text;
+    userModel.lastName = secondNameEditingContoller.text;
+    userModel.uid = user.uid;
+
+    //
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap());
+    Fluttertoast.showToast(
+        msg: "cheers buddy account created :)",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        (Route<dynamic> route) => false);
+    
   }
 }
