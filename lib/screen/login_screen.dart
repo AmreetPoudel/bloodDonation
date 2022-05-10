@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return "email cannot be empty";
         }
 
-        //copied from code grapper regex for email validation with reqex
+        // copied from code grapper regex for email validation with reqex
         Pattern pattern =
             r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
             r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
@@ -49,6 +49,11 @@ class _LoginScreenState extends State<LoginScreen> {
         } else {
           return null;
         }
+
+        // if (!RegExp("^[a-zA-z0-9+_.-]+@[a-zA-Z09.-]+.[a-z]").hasMatch(value)) {
+        //   return "Enter a valid email address";
+        // }
+        // return null;
       },
       onSaved: (value) {
         emailController.text = value.toString();
@@ -70,18 +75,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final passwordField = TextFormField(
       controller: passwordController,
-      validator:  (value) {
+      // ignore: body_might_complete_normally_nullable
+      validator: (value) {
         RegExp regex = RegExp(r'^.{6,}$');
         if (value!.isEmpty) {
-          return "please enter your password";
+          return " password required for login";
         }
         if (!regex.hasMatch(value)) {
-          return "password must be atleast 6 characters long";
+          return " atleast 6 characters long";
         }
       },
       textInputAction: TextInputAction.done,
       onSaved: (value) {
-        passwordController.text = value.toString();
+        // ignore: unused_local_variable
+        passwordController.text = value!.toString();
       },
       obscureText: true,
       decoration: InputDecoration(
@@ -100,7 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
       color: Colors.redAccent,
       child: MaterialButton(
         onPressed: () {
-         signIn(emailController.toString().trim(), passwordController.toString().trim());
+          signIn(emailController.text,
+              passwordController.text);
         },
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 15),
         minWidth: MediaQuery.of(context).size.width,
@@ -196,22 +204,61 @@ class _LoginScreenState extends State<LoginScreen> {
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
                   timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.redAccent,
-                  textColor: Colors.white,
+                  backgroundColor: Colors.white,
+                  textColor: Colors.green,
                   fontSize: 16.0),
-              Navigator.pushReplacement(context,
+              Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const HomeScreen())),
             },
-          ).catchError((e) => {
-                Fluttertoast.showToast(
-                    msg: e!.toString(),
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.redAccent,
-                    textColor: Colors.white,
-                    fontSize: 16.0),
-              });
+          )
+          // ignore: invalid_return_type_for_catch_error
+          //commented code is ok tested but this is for every possible case so we can handle all the possible errors
+          // ignore: invalid_return_type_for_catch_error
+          .catchError((e) => {
+            if (e.toString().contains("ERROR_WRONG_PASSWORD")) {
+              Fluttertoast.showToast(
+                  msg: "incorrect password",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.white,
+                  textColor: Colors.red,
+                  fontSize: 16.0),
+            } else if (e.toString().contains("ERROR_USER_NOT_FOUND")) {
+              Fluttertoast.showToast(
+                  msg: "user not found",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.white,
+                  textColor: Colors.red,
+                  fontSize: 16.0),
+            } else {
+              Fluttertoast.showToast(
+                  msg: e.toString(),
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.white,
+                  textColor: Colors.red,
+                  fontSize: 16.0),
+            }
+          });
     }
   }
 }
+
+           
+            
+                // Fluttertoast.showToast(
+                //     msg: e!.message,
+                //     toastLength: Toast.LENGTH_SHORT,
+                //     gravity: ToastGravity.BOTTOM,
+                //     timeInSecForIosWeb: 1,
+                //     backgroundColor: Colors.redAccent,
+                //     textColor: Colors.white,
+//                 //     fontSize: 16.0),
+//               });
+//     }
+//   }
+// }
