@@ -1,7 +1,9 @@
 import 'package:blood/model/user_model.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'buttonNavigationbar.dart';
 
 import 'login_screen.dart';
 
@@ -101,31 +103,59 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ),
     //designing button navigation items using bottomnavigationbar
- bottomNavigationBar: BottomNavigationBar(
+
+      bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.red,
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          
+          
+          unselectedItemColor: Colors.grey,
+          selectedIconTheme: IconThemeData(
+            color: Colors.red,
+          ),
+        showUnselectedLabels: false,
+          selectedFontSize: 15,
+          selectedLabelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15,),
           type: BottomNavigationBarType.fixed,
           items: [
           BottomNavigationBarItem(
-            icon:  Icon(Icons.apps),
+            icon:  Icon(Icons.apps,
+            size: 25 ,),
             label: 'Home',
           ),
+          
         BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.search,
+            size: 25 ,),
             label: 'search',
           ),
        
-          
            BottomNavigationBarItem(
-            icon: Icon(Icons.circle_notifications),
+            icon:  Icon(Icons.add,
+            size: 40 ,
+            ),
+            label: "send request"
+            
+            
+          ),
+           BottomNavigationBarItem(
+            icon: Icon(Icons.circle_notifications,
+            size: 25 ,),
             label: 'notification',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'person',
+            icon: Icon(Icons.person,size: 25,),
+            label: 'profile',
           ),
       ],
         )
-
+      
     );
+
+    
   }
 
   //logout for chip logout
