@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'buttonNavigationbar.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -208,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   textColor: Colors.green,
                   fontSize: 16.0),
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const HomeScreen())),
+                  MaterialPageRoute(builder: (context) => const ButtonNavigation())),
             },
           )
           // ignore: invalid_return_type_for_catch_error
