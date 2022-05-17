@@ -1,5 +1,5 @@
 import 'package:blood/model/user_model.dart';
-import 'package:blood/screen/home_screen.dart';
+import 'package:blood/screen/buttonNavigationbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +20,94 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 //editing controller
   final firstNameEditingContoller = TextEditingController();
   final secondNameEditingContoller = TextEditingController();
+  final districtEditingController = TextEditingController();
   final emailEditingContoller = TextEditingController();
   final passwordEditingContoller = TextEditingController();
   final conformPasswordEditingContoller = TextEditingController();
+  String selectedDistrict = 'Achham';
+  String selectedBloodGroup = 'AB+';
+
+  var bloodtype = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+
+  var district = [
+    'Achham',
+    'Arghakhanchi',
+    'Baglung',
+    'Baitadi',
+    'Bajhang',
+    'Bajura',
+    'Banke',
+    'Bara',
+    'Bardiya',
+    'Bhaktapur',
+    'Bhojpur',
+    'Chitwan',
+    'Dadeldhura',
+    'Dailekh',
+    'Dang',
+    'Darchula',
+    'Dhading',
+    'Dhankuta',
+    'Dhanusha',
+    'Dolakha',
+    'Dolpa',
+    'Doti',
+    'Gorkha',
+    'Gulmi',
+    'Humla',
+    'Illam',
+    'Jajarkot',
+    'Jhapa',
+    'Jumla',
+    'Kailali',
+    'Kalikot',
+    'Kanchanpur',
+    'Kapilavastu',
+    'Kaski',
+    'Kathmandu',
+    'Kavrepalanchok',
+    'Khotang',
+    'Lalitpur',
+    'Lamjung',
+    'Mahottari',
+    'Makwanpur',
+    'Manang',
+    'Morang',
+    'Mugu',
+    'Mustang',
+    'Myagdi',
+    'Nawalpur',
+    'Nuwakot',
+    'Okhaldhunga',
+    'Palpa',
+    'Panchthar',
+    'Parasi',
+    'Parbat',
+    'Parsa',
+    'Pyuthan',
+    'Ramechhap',
+    'Rasuwa',
+    'Rautahat',
+    'Rolpa',
+    'Rukum',
+    'Rupandehi',
+    'Salyan',
+    'Sankhuwasabha',
+    'Saptari',
+    'Sarlahi',
+    'Sindhuli',
+    'Sindhupalchok',
+    'Siraha',
+    'Solukhumbu',
+    'Sunsari',
+    'Surkhet',
+    'Syangja',
+    'Tanahun',
+    'Taplejung',
+    'Tehrathum',
+    'Udayapur'
+  ];
+
   @override
   Widget build(BuildContext context) {
 //first name
@@ -77,6 +162,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             borderRadius: BorderRadius.circular(10),
           )),
     );
+
+//discrict
 
 //email controller
     final emailField = TextFormField(
@@ -180,8 +267,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       color: Colors.redAccent,
       child: MaterialButton(
         onPressed: () {
-            signUp(emailEditingContoller.text, passwordEditingContoller.text);
-
+          signUp(emailEditingContoller.text, passwordEditingContoller.text);
         },
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 15),
         minWidth: MediaQuery.of(context).size.width,
@@ -235,7 +321,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                       secondName,
                       const SizedBox(
-                        height: 25,
+                        height: 15,
                       ),
                       emailField,
                       const SizedBox(
@@ -248,6 +334,91 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       conformPassword,
                       const SizedBox(
                         height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.30,
+                              height: 40,
+                              padding: EdgeInsets.all(10),
+                              child: Center(
+                                  child: Text('select district',
+                                      style: TextStyle(
+                                          color: Colors.black.withOpacity(0.7),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)))),
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.25),
+                          Center(
+                              child: Text('select bloodType',
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.7),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold))),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            height: 40,
+                            padding: EdgeInsets.all(1.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.0),
+                              border: Border.all(
+                                  color: Colors.grey,
+                                  style: BorderStyle.solid,
+                                  width: 0.30),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                elevation: 0,
+                                value: selectedDistrict,
+                                icon: Icon(Icons.keyboard_arrow_down),
+                                items: district.map((String items) {
+                                  return DropdownMenuItem(
+                                      value: items, child: Text(items));
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedDistrict = newValue!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 40,
+                            //check this width on other devices too and
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            padding: EdgeInsets.all(1.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.0),
+                              border: Border.all(
+                                color: Colors.grey,
+                                style: BorderStyle.solid,
+                                width: 0.30,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                elevation: 0,
+                                value: selectedBloodGroup,
+                                icon: Icon(Icons.keyboard_arrow_down),
+                                items: bloodtype.map((String items) {
+                                  return DropdownMenuItem(
+                                      value: items, child: Text(items));
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedDistrict = newValue!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       signUpButton
                     ]),
@@ -263,7 +434,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (_formkey.currentState!.validate()) {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value)=>{ postDetailsToFirestore()})
+          .then((value) => {postDetailsToFirestore()})
           .catchError((e) => {
                 Fluttertoast.showToast(
                     msg: e.toString(),
@@ -291,6 +462,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     userModel.firstName = firstNameEditingContoller.text;
     userModel.lastName = secondNameEditingContoller.text;
     userModel.uid = user.uid;
+    userModel.district = selectedDistrict;
+    userModel.bloodType = selectedBloodGroup;
 
     //
     await firebaseFirestore
@@ -308,8 +481,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const ButtonNavigation()),
         (Route<dynamic> route) => false);
-    
   }
 }

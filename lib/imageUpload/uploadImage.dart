@@ -1,121 +1,133 @@
-// ignore: file_names
+//for image upload we will direct use packages which includes image picker and for storage we will use
+// firebase storage
+
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
-//for storage we will be using firebase storage and for picking the image we will be using image picker package
 
-// ignore: camel_case_types, must_be_immutable
-class uploadImage extends StatefulWidget {
-  String userId="";	
-  uploadImage({Key? key, userId}) : super(key: key);
+class ImageUpload extends StatefulWidget {
+  final String? userId;
+  const ImageUpload({Key? key, this.userId}) : super(key: key);
 
   @override
-  State<uploadImage> createState() => _uploadImageState();
+  State<ImageUpload> createState() => _ImageUploadState();
 }
 
-class _uploadImageState extends State<uploadImage> {
+class _ImageUploadState extends State<ImageUpload> {
+  //taking image in image
+//we will have problem on image retrval because there will be so much uploads
+//so for storage we will find unique property of user id and then we will store image in that folder
+//folder structure will be like this uniqueUserId/images/imagename.jpg
+//for imagename also we will use timestamp it will be unique so no problem
+  // initializing some values
   File? _image;
   final imagePicker = ImagePicker();
   String? downloadURL;
-  //image picking method to pick images from gallary or even you can use camera
-  //but we will be using gallary for this project
-  Future getImageFromGallery() async {
-    final pickedImage =
-        await imagePicker.pickImage(source: ImageSource.gallery);
+
+  // picking the image
+
+  Future imagePickerMethod() async {
+    final pick = await imagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
-      if (pickedImage != null) {
-        _image = File(pickedImage.path);
+      if (pick != null) {
+        _image = File(pick.path);
       } else {
-        showsnackbar("no image selected",const  Duration(milliseconds: 1200));
+        showSnackBar("No File selected", Duration(milliseconds: 400));
       }
     });
   }
 
-//this snackbar is fireed when user press the button but he donot select any image
-  showsnackbar(String snackText, Duration d) {
-    final snackBar = SnackBar(content: Text(snackText), duration: d);
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+  // uploading the image to firebase cloudstore
+  Future uploadImage(File _image) async {
+    final imgId = DateTime.now().millisecondsSinceEpoch.toString();
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    Reference reference = FirebaseStorage.instance
+        .ref()
+        .child('${widget.userId}/images')
+        .child("post_$imgId");
 
-  //we have selected image and image is in _image now we need to upload it to the firebase storage............
-  //not only upload also we will get the url of that image and show that image in our application
-  //got problem on upload 3 4 mb photo is also taking too long time to upload but speed is not case now we will change the method
-  //after project will be completed
-  Future uploadImageTOfirestore() async {
-    Reference ref = FirebaseStorage
-    .instance
-    .ref()
-    .child("${widget.userId}/images")
-    .child("${DateTime.now().millisecondsSinceEpoch}");
-    await ref
-    .putFile(_image!);
-    downloadURL = await ref.getDownloadURL();
-    
+    await reference.putFile(_image);
+    downloadURL = await reference.getDownloadURL();
+
+    // cloud firestore
+    await firebaseFirestore
+        .collection("users")
+        .doc(widget.userId)
+        .collection("images")
+        .add({'downloadURL': downloadURL}).whenComplete(
+            () => showSnackBar("Image Uploaded", Duration(seconds: 2)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Upload Image"),
-        ),
-        body: Center(
-            child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: SizedBox(
-              height: 500,
-              width: double.infinity,
-              child: Column(
-                children: [
-                 const Text("Upload Image"),
-                 const  SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Container(
-                      width: 300,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.red),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Center(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: _image == null
-                                ? const Center(
-                                    child:Text("no image selected"),
-                                  )
-                                : Image.file(_image!),
+      appBar: AppBar(
+        title: const Text("Upload Image "),
+      ),
+      body: Center(
+        child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: SizedBox(
+                    height: 500,
+                    width: double.infinity,
+                    child: Column(children: [
+                      const Text("Upload Image"),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                          width: 300,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.red),
                           ),
-                        ],
-                      )),
-                    ),
-                  ),
-                  //two elevated buttons
-                  ElevatedButton(
-                      onPressed: () {
-                        getImageFromGallery();
-                      },
-                      child:const  Text("select image")),
-                  ElevatedButton(
-                      onPressed: () {
-                        uploadImageTOfirestore().whenComplete(() => 
-                        showsnackbar("Image uploaded successfully $widget.userId",
-                         const Duration(milliseconds: 12000
-                         )
-                         )
-                         );
-                      },
-                      child: const Text("upload image")),
-                ],
-              ),
-            ),
-          ),
-        )));
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // the image that we wanted to upload
+                                Expanded(
+                                    child: _image == null
+                                        ? const Center(
+                                            child: Text("No image selected"))
+                                        : Image.file(_image!)),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      imagePickerMethod();
+                                    },
+                                    child: const Text("Select Image")),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      if (_image != null) {
+                                        uploadImage(_image!);
+                                      } else {
+                                        showSnackBar("Select Image first",
+                                            Duration(milliseconds: 400));
+                                      }
+                                    },
+                                    child: const Text("Upload Image")),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ])))),
+      ),
+    );
+  }
+
+  // show snackbar
+  //for showing short message we can user either snackbar or toast.
+  //we used snackbar  in this case. if got problem then switch to toast
+
+  showSnackBar(String snackText, Duration d) {
+    final snackBar = SnackBar(content: Text(snackText), duration: d);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

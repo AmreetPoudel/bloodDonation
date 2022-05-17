@@ -8,14 +8,14 @@ import '../model/user_model.dart';
 import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({ Key? key }) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-   User? user = FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
   @override
@@ -34,7 +34,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {});
     });
   }
-   Future<void> logout(BuildContext context) async {
+
+  Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginScreen()));
@@ -42,62 +43,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-       body: Center(
-         child: Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child:  Column(
-                children: <Widget>[
-                  const Text(
-                    "Welcome Back",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "${loggedInUser.firstName}" "  ${loggedInUser.lastName}",
-                  ),
-                  Text("${loggedInUser.email}",
-                      style: const TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w500,
-                      )),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                   Text("${loggedInUser.uid}",
-                      style: const TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w500,
-                      )),
-                      const SizedBox(
-                    height: 15,
-                  ),
-                  ActionChip(
-                      label: const Text("Logout"),
-                      onPressed: () {
-                        logout(context);
-                      }),
-                      //two buttons for upload image and show image
-                      const SizedBox(
-                    height: 15,
-                  ),
-                  ElevatedButton(onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>uploadImage(userId:loggedInUser.uid!)));
-                  }, child: Text("Upload Image"),),
-                  ElevatedButton(onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>showUploadedImage()));
-                  }, child: Text("Show Image"),),
-
-                ],
-              ),
+    return Scaffold(
+      body: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                const Text(
+                  "Welcome Back",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "${loggedInUser.firstName}" "  ${loggedInUser.lastName}",
+                ),
+                Text("${loggedInUser.email}",
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w500,
+                    )),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text("${loggedInUser.uid}",
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w500,
+                    )),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "${loggedInUser.district}" "  ${loggedInUser.bloodType}",
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                ActionChip(
+                    label: const Text("Logout"),
+                    onPressed: () {
+                      logout(context);
+                    }),
+                //two buttons for upload image and show image
+                const SizedBox(
+                  height: 15,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ImageUpload(userId: loggedInUser.uid!)));
+                  },
+                  child: Text("Upload Image"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ImageRetrive(userId: loggedInUser.uid!)));
+                  },
+                  child: Text("Show Image"),
+                ),
+              ],
             ),
           ),
-       ),
-      
+        ),
+      ),
     );
   }
 }
