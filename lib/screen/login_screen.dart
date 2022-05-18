@@ -1,7 +1,8 @@
-// ignore: file_names
+// ignore: file_names, unused_import
 import 'package:blood/screen/home_screen.dart';
 import 'package:blood/screen/registration_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -15,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   //form key is used in validation of form it is global key with type formstate
   final _formKey = GlobalKey<FormState>();
 
@@ -109,8 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
       color: Colors.redAccent,
       child: MaterialButton(
         onPressed: () {
-          signIn(emailController.text,
-              passwordController.text);
+          signIn(emailController.text, passwordController.text);
         },
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 15),
         minWidth: MediaQuery.of(context).size.width,
@@ -125,71 +126,91 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 250,
-                      child:
-                          Image.asset("assets/blood.jpg", fit: BoxFit.contain),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    emailField,
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    passwordField,
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    loginButton,
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const Text("dont have an account?"),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const RegistrationScreen()));
-                          },
-                          child: const Text(
-                            "SignUp",
-                            style: TextStyle(
-                              color: Colors.redAccent,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        // CHeck for Errors
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              "Error: ${snapshot.error}",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 20,
+              ),
+            ),
+          );
+        }
+        // once Completed, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: SingleChildScrollView(
+                child: Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 250,
+                            child: Image.asset("assets/blood.jpg",
+                                fit: BoxFit.contain),
                           ),
-                        )
-                      ],
-                    )
-                  ],
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          emailField,
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          passwordField,
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          loginButton,
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Text("dont have an account?"),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const RegistrationScreen()));
+                                },
+                                child: const Text(
+                                  "SignUp",
+                                  style: TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      ),
+          );
+        }
+        return CircularProgressIndicator();
+      },
     );
   }
 
@@ -209,58 +230,61 @@ class _LoginScreenState extends State<LoginScreen> {
                   backgroundColor: Colors.white,
                   textColor: Colors.green,
                   fontSize: 16.0),
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const ButtonNavigation())),
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const ButtonNavigation())),
             },
           )
           // ignore: invalid_return_type_for_catch_error
           //commented code is ok tested but this is for every possible case so we can handle all the possible errors
           // ignore: invalid_return_type_for_catch_error
           .catchError((e) => {
-            if (e.toString().contains("ERROR_WRONG_PASSWORD")) {
-              Fluttertoast.showToast(
-                  msg: "incorrect password",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.white,
-                  textColor: Colors.red,
-                  fontSize: 16.0),
-            } else if (e.toString().contains("ERROR_USER_NOT_FOUND")) {
-              Fluttertoast.showToast(
-                  msg: "user not found",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.white,
-                  textColor: Colors.red,
-                  fontSize: 16.0),
-            } else {
-              Fluttertoast.showToast(
-                  msg: e.toString(),
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.white,
-                  textColor: Colors.red,
-                  fontSize: 16.0),
-            }
-          });
+                if (e.toString().contains("ERROR_WRONG_PASSWORD"))
+                  {
+                    Fluttertoast.showToast(
+                        msg: "incorrect password",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.white,
+                        textColor: Colors.red,
+                        fontSize: 16.0),
+                  }
+                else if (e.toString().contains("ERROR_USER_NOT_FOUND"))
+                  {
+                    Fluttertoast.showToast(
+                        msg: "user not found",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.white,
+                        textColor: Colors.red,
+                        fontSize: 16.0),
+                  }
+                else
+                  {
+                    Fluttertoast.showToast(
+                        msg: e.toString(),
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.white,
+                        textColor: Colors.red,
+                        fontSize: 16.0),
+                  }
+              });
     }
   }
-}
 
-           
-            
-                // Fluttertoast.showToast(
-                //     msg: e!.message,
-                //     toastLength: Toast.LENGTH_SHORT,
-                //     gravity: ToastGravity.BOTTOM,
-                //     timeInSecForIosWeb: 1,
-                //     backgroundColor: Colors.redAccent,
-                //     textColor: Colors.white,
+  // Fluttertoast.showToast(
+  //     msg: e!.message,
+  //     toastLength: Toast.LENGTH_SHORT,
+  //     gravity: ToastGravity.BOTTOM,
+  //     timeInSecForIosWeb: 1,
+  //     backgroundColor: Colors.redAccent,
+  //     textColor: Colors.white,
 //                 //     fontSize: 16.0),
 //               });
 //     }
 //   }
-// }
+// }}
+}

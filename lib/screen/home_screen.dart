@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
-   List<Widget> pages = [
+  List<Widget> pages = [
     const HomeScreen(),
     const SearchScreen(),
     const PostScreen(),
@@ -33,8 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
       currentIndex = index;
     });
   }
-  
- @override
+
+  @override
   Widget build(BuildContext context) {
 //topmost button inspired from tiktok for the posts from same district
     final forYou = TextButton(
@@ -54,32 +54,26 @@ class _HomeScreenState extends State<HomeScreen> {
       child: const Text('allfeed'),
     );
     return Scaffold(
-        // appBar: AppBar(
-        //   title: const Text("blood donation"),
-        //   centerTitle: true,
-        // ),
-        body: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      forYou,
-                      allFeed,
-                      
-                    ]),
-                    ],
-            ),
+      // appBar: AppBar(
+      //   title: const Text("blood donation"),
+      //   centerTitle: true,
+      // ),
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    forYou,
+                    allFeed,
+                  ]),
+            ],
           ),
         ),
-        
-
-        
-          
+      ),
     );
   }
 }
-

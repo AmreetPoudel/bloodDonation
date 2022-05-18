@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types
 
 import 'package:blood/screen/ProfileScreen.dart';
+import 'package:blood/screen/allposts.dart';
 import 'package:blood/screen/home_screen.dart';
 import 'package:blood/screen/testscreen.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'PostScreen.dart';
 // import 'ProfileScreen.dart';
 import 'SearchScreen.dart';
 import 'testscreen.dart';
+import 'allposts.dart';
 
 class ButtonNavigation extends StatefulWidget {
   const ButtonNavigation({Key? key}) : super(key: key);
@@ -24,8 +26,9 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
     const SearchScreen(),
     const PostScreen(),
     const NotificationScreen(),
+    allPosts(),
     // Profile(),
-    ProfileScreen()
+    // ProfileScreen()
   ];
   //ontap function for button navigation bar
   //defining routes for the bottom navigation bar

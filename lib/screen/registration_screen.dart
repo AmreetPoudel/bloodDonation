@@ -412,7 +412,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 }).toList(),
                                 onChanged: (String? newValue) {
                                   setState(() {
-                                    selectedDistrict = newValue!;
+                                    selectedBloodGroup = newValue!;
                                   });
                                 },
                               ),
