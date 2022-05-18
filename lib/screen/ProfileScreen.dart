@@ -101,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             builder: (context) =>
                                 ImageUpload(userId: loggedInUser.uid!)));
                   },
-                  child: Text("Upload Image"),
+                  child: const Text("Upload Image"),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -111,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             builder: (context) =>
                                 ImageRetrive(userId: loggedInUser.uid!)));
                   },
-                  child: Text("Show Image"),
+                  child: const Text("Show Image"),
                 ),
               ],
             ),

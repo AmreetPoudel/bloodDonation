@@ -6,9 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'buttonNavigationbar.dart';
-
-import '../model/user_model.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({Key? key}) : super(key: key);
@@ -27,6 +24,7 @@ class _PostScreenState extends State<PostScreen> {
   final TextEditingController districtEditingController =
       TextEditingController();
   final TextEditingController bloodEditingController = TextEditingController();
+  final TextEditingController phoneEditingController = TextEditingController();
 
   var bloodtype = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
@@ -115,6 +113,7 @@ class _PostScreenState extends State<PostScreen> {
     postEditingController.dispose();
     districtEditingController.dispose();
     bloodEditingController.dispose();
+    phoneEditingController.dispose();
     super.dispose();
   }
 
@@ -122,12 +121,16 @@ class _PostScreenState extends State<PostScreen> {
     postEditingController.clear();
     districtEditingController.clear();
     bloodEditingController.clear();
+    phoneEditingController
+        .clear(); //this is for clearing the text field after the post is done
   }
 
   String post = "";
+  String phoneNumber = "";
 
   setdata() {
-    String post = postEditingController.text;
+    post = postEditingController.text;
+    phoneNumber = phoneEditingController.text;
   }
 
 //adding post,district and blood group to firebase
@@ -137,13 +140,13 @@ class _PostScreenState extends State<PostScreen> {
   Future<void> addUser() {
     return data
         .add({
-          'post': postEditingController.text,
+          'post': post,
           'district': requiredDistrict,
           'bloodGroup': requiredBloodGroup,
+          "phoneNo": phoneEditingController.text,
           'uid': user!.uid,
         })
         .then((value) => {
-              print('Added'),
               Fluttertoast.showToast(
                   msg: "Post Added",
                   toastLength: Toast.LENGTH_SHORT,
@@ -204,10 +207,10 @@ class _PostScreenState extends State<PostScreen> {
                           ),
                         ),
                       ),
-
+//post the message this is text field
                       Container(
                         margin: EdgeInsets.all(12),
-                        height: maxlines * 24.0,
+                        height: maxlines * 21,
                         child: TextField(
                           controller: postEditingController,
                           maxLines: maxlines,
@@ -218,7 +221,6 @@ class _PostScreenState extends State<PostScreen> {
                           ),
                         ),
                       ),
-                      //one text field to upload blood request
 
                       //two buttons for post and cancel
                       Row(
@@ -270,10 +272,10 @@ class _PostScreenState extends State<PostScreen> {
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
-                                hint: Text("blood type"),
+                                hint: const Text("blood type"),
                                 elevation: 0,
                                 value: requiredBloodGroup,
-                                icon: Icon(Icons.keyboard_arrow_down),
+                                icon: const Icon(Icons.keyboard_arrow_down),
                                 items: bloodtype.map((String items) {
                                   return DropdownMenuItem(
                                       value: items, child: Text(items));
@@ -288,18 +290,51 @@ class _PostScreenState extends State<PostScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 9,
                       ),
                       //,one button for upload image
+                      TextField(
+                        controller: phoneEditingController,
+                        decoration: const InputDecoration(
+                          hintText: 'phone Number',
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.lightBlueAccent, width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.lightBlueAccent, width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      //input field to take phone number form user
+
                       Material(
                         elevation: 5,
                         borderRadius: BorderRadius.circular(50),
                         color: Colors.redAccent,
                         child: MaterialButton(
                           onPressed: () {
-                            setdata();
-                            addUser();
+                            setState(() {
+                              setdata();
+                              addUser();
+                              clearText();
+                            });
                           },
                           padding: const EdgeInsets.all(10),
                           minWidth: MediaQuery.of(context).size.width * 0.40,
@@ -313,7 +348,7 @@ class _PostScreenState extends State<PostScreen> {
                             ),
                           ),
                         ),
-                      ),
+                      )
                     ]))),
           ),
         ));

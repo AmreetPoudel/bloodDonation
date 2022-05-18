@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class allPosts extends StatefulWidget {
   allPosts({Key? key}) : super(key: key);
@@ -15,8 +13,8 @@ class _allPostsState extends State<allPosts> {
       FirebaseFirestore.instance.collection('Post').snapshots();
 
   // // For Deleting User..............................................................................................
-  // CollectionReference students =
-  //     FirebaseFirestore.instance.collection('students');
+  // CollectionReference posts =
+  //     FirebaseFirestore.instance.collection('Post');
   // Future<void> deleteUser(id) {
   //   // print("User Deleted $id");
   //   return students
@@ -46,12 +44,13 @@ class _allPostsState extends State<allPosts> {
             Map item = document.data() as Map<String, dynamic>;
             storedocs.add(item);
             item['uid'] = document.id;
-            print(storedocs);
+            // print(storedocs);
           }).toList();
 
           List bloodGroup = storedocs.map((i) => i['bloodGroup']).toList();
           List district = storedocs.map((i) => i['district']).toList();
-          List Post = storedocs.map((i) => i['post']).toList();
+          List post = storedocs.map((i) => i['post']).toList();
+          List phoneNumber = storedocs.map((i) => i['phoneNumber']).toList();
           return SafeArea(
             child: Container(
               height: MediaQuery.of(context).size.height,
@@ -62,11 +61,6 @@ class _allPostsState extends State<allPosts> {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
-                    //card to display bloodgroup, district and blood request
-                    //for loop
-                    // for (var i = 0; i < storedocs.length; i++) {
-                    // for(var);
-                    // for loop to display all the posts in card
                     for (var i = 0; i < storedocs.length; i++)
                       Container(
                         width: double.infinity,
@@ -86,7 +80,7 @@ class _allPostsState extends State<allPosts> {
                             textBaseline: TextBaseline.alphabetic,
                             children: [
                               Text(
-                                'blood group: ${storedocs.map((i) => i['bloodGroup']).toList()[i]}',
+                                'blood group: ${bloodGroup[i]}',
                                 style: TextStyle(
                                   color: Colors.red.shade500,
                                   fontSize: 18.0,
@@ -94,16 +88,24 @@ class _allPostsState extends State<allPosts> {
                                 ),
                               ),
                               Text(
-                                'district: ${storedocs.map((i) => i['district']).toList()[i]}',
+                                'district: ${district[i]}',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                'request: ${storedocs.map((i) => i['post']).toList()[i]}',
+                                'request: ${post[i]}',
                                 style: TextStyle(
                                   fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'phone Number: ${phoneNumber[i]}',
+                                style: TextStyle(
+                                  color: Colors.red.shade500,
+                                  fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
