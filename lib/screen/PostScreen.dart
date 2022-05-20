@@ -157,7 +157,6 @@ class _PostScreenState extends State<PostScreen> {
                   fontSize: 16.0),
             })
         .catchError((error) => {
-              print(error),
               Fluttertoast.showToast(
                   msg: "Post failed",
                   toastLength: Toast.LENGTH_SHORT,
@@ -241,10 +240,10 @@ class _PostScreenState extends State<PostScreen> {
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
-                                hint: Text("select district"),
+                                hint: const Text("select district"),
                                 elevation: 0,
                                 value: requiredDistrict,
-                                icon: Icon(Icons.keyboard_arrow_down),
+                                icon: const Icon(Icons.keyboard_arrow_down),
                                 items: districts.map((String items) {
                                   return DropdownMenuItem(
                                       value: items, child: Text(items));

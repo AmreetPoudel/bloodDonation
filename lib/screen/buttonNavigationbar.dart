@@ -52,7 +52,7 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
           onTap: onTap,
           currentIndex: currentIndex,
           //unselectedItemColor: Colors.grey,
-          selectedIconTheme: IconThemeData(
+          selectedIconTheme: const IconThemeData(
 //adding themes to bottomNavigation bar
             color: Colors.red,
           ),
@@ -60,12 +60,12 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
           showUnselectedLabels: false,
           showSelectedLabels: true,
           selectedFontSize: 15,
-          selectedLabelStyle: TextStyle(
+          selectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
           ),
           type: BottomNavigationBarType.fixed,
-          items: [
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.apps,
