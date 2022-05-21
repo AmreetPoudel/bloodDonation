@@ -1,4 +1,6 @@
 import 'package:blood/model/user_model.dart';
+import 'package:blood/screen/allFeedPost.dart';
+import 'package:blood/screen/forYouPosts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> pages = [
     const HomeScreen(),
-    const SearchScreen(),
+    const searchPost(),
     const PostScreen(),
     const NotificationScreen(),
     const ProfileScreen(),
@@ -135,83 +137,75 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
 
-          final forYouCards = SafeArea(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
-              padding: const EdgeInsets.all(5),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    for (var i = 0; i < storedocs.length; i++)
-                      //nested check of district on data with district of current user
-                      if (loggedInUser.district == district[i])
-                        Container(
-                          width: double.infinity,
-                          child: Card(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 5.0, vertical: 11.0),
-                            elevation: 7,
-                            shadowColor: Colors.red,
-                            borderOnForeground: true,
-                            // width: double.infinity,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Column(
-                              textDirection: TextDirection.rtl,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                Text(
-                                  'blood group: ${bloodGroup[i]}',
-                                  style: TextStyle(
-                                    color: Colors.red.shade500,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'district: ${district[i]}',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'request: ${post[i]}',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'phone Number: ${phoneNo[i]}',
-                                  style: TextStyle(
-                                    color: Colors.red.shade500,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
+          final forYouCards = Column(
+            children: [
+              for (var i = 0; i < storedocs.length; i++)
+                //nested check of district on data with district of current user
+                // if (loggedInUser.district == district[i])
+                SizedBox(
+                  height: 100,
+                  width: double.infinity,
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 5.0, vertical: 11.0),
+                    elevation: 7,
+                    shadowColor: Colors.red,
+                    borderOnForeground: true,
+                    // width: double.infinity,
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Column(
+                      textDirection: TextDirection.rtl,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          'blood group: ${bloodGroup[i]}',
+                          style: TextStyle(
+                            color: Colors.red.shade500,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                  ],
+                        Text(
+                          'district: ${district[i]}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'request: ${post[i]}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'phone Number: ${phoneNo[i]}',
+                          style: TextStyle(
+                            color: Colors.red.shade500,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
+            ],
           );
 
 //topmost button inspired from tiktok for the posts from same district
           final forYou = TextButton(
             onPressed: () => {
-              setState(() {
-                forYouCards;
-              })
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => forYouPosts(),
+                ),
+              ),
               //posts from same district + notification
             },
             child: const Text(
@@ -222,9 +216,12 @@ class _HomeScreenState extends State<HomeScreen> {
           //topmost button
           final allFeed = TextButton(
             onPressed: () => {
-              setState(() {
-                allCards;
-              })
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => allFeedPosts(),
+                ),
+              ),
 
               //feed all the posts from users
             },

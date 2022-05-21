@@ -1,17 +1,39 @@
+// ignore: file_names
+import 'package:blood/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // ignore: camel_case_types
-class allPosts extends StatefulWidget {
-  const allPosts({Key? key}) : super(key: key);
+class allFeedPosts extends StatefulWidget {
+  const allFeedPosts({Key? key}) : super(key: key);
 
   @override
-  _allPostsState createState() => _allPostsState();
+  _allFeedPostsState createState() => _allFeedPostsState();
 }
 
-class _allPostsState extends State<allPosts> {
+class _allFeedPostsState extends State<allFeedPosts> {
   final Stream<QuerySnapshot> allPost =
       FirebaseFirestore.instance.collection('Post').snapshots();
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      // ignore: non_constant_identifier_names
+      loggedInUser = UserModel.fromMap(value.data()!);
+      //after long i found this solution but this does not work for me
+      //  loggedInUser  = UserModel.fromMap(value.data().cast<String, dynamic>());
+
+      setState(() {});
+    });
+  }
 
   // // For Deleting User..............................................................................................
   // CollectionReference posts =
@@ -66,6 +88,8 @@ class _allPostsState extends State<allPosts> {
                 child: Column(
                   children: [
                     for (var i = 0; i < storedocs.length; i++)
+
+                      // ignore: sized_box_for_whitespace
                       Container(
                         width: double.infinity,
                         child: Card(

@@ -341,7 +341,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Container(
                               width: MediaQuery.of(context).size.width * 0.30,
                               height: 40,
-                              padding: EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(10),
                               child: Center(
                                   child: Text('select district',
                                       style: TextStyle(
@@ -363,7 +363,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Container(
                             width: MediaQuery.of(context).size.width * 0.5,
                             height: 40,
-                            padding: EdgeInsets.all(1.0),
+                            padding: const EdgeInsets.all(1.0),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30.0),
                               border: Border.all(
@@ -375,7 +375,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               child: DropdownButton(
                                 elevation: 0,
                                 value: selectedDistrict,
-                                icon: Icon(Icons.keyboard_arrow_down),
+                                icon: const Icon(Icons.keyboard_arrow_down),
                                 items: district.map((String items) {
                                   return DropdownMenuItem(
                                       value: items, child: Text(items));
@@ -392,7 +392,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             height: 40,
                             //check this width on other devices too and
                             width: MediaQuery.of(context).size.width * 0.4,
-                            padding: EdgeInsets.all(1.0),
+                            padding: const EdgeInsets.all(1.0),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30.0),
                               border: Border.all(
@@ -405,7 +405,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               child: DropdownButton(
                                 elevation: 0,
                                 value: selectedBloodGroup,
-                                icon: Icon(Icons.keyboard_arrow_down),
+                                icon: const Icon(Icons.keyboard_arrow_down),
                                 items: bloodtype.map((String items) {
                                   return DropdownMenuItem(
                                       value: items, child: Text(items));

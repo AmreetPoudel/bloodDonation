@@ -1,100 +1,39 @@
-// ignore_for_file: camel_case_types
-
+// ignore: file_names
+import 'package:blood/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // ignore: camel_case_types
-class searchPost extends StatefulWidget {
-  const searchPost({Key? key}) : super(key: key);
+class forYouPosts extends StatefulWidget {
+  const forYouPosts({Key? key}) : super(key: key);
 
   @override
-  _searchPostState createState() => _searchPostState();
+  _forYouPostsState createState() => _forYouPostsState();
 }
 
-class _searchPostState extends State<searchPost> {
-  String selectedDistrict = 'Achham';
-
-  var districts = [
-    'Achham',
-    'Arghakhanchi',
-    'Baglung',
-    'Baitadi',
-    'Bajhang',
-    'Bajura',
-    'Banke',
-    'Bara',
-    'Bardiya',
-    'Bhaktapur',
-    'Bhojpur',
-    'Chitwan',
-    'Dadeldhura',
-    'Dailekh',
-    'Dang',
-    'Darchula',
-    'Dhading',
-    'Dhankuta',
-    'Dhanusha',
-    'Dolakha',
-    'Dolpa',
-    'Doti',
-    'Gorkha',
-    'Gulmi',
-    'Humla',
-    'Illam',
-    'Jajarkot',
-    'Jhapa',
-    'Jumla',
-    'Kailali',
-    'Kalikot',
-    'Kanchanpur',
-    'Kapilavastu',
-    'Kaski',
-    'Kathmandu',
-    'Kavrepalanchok',
-    'Khotang',
-    'Lalitpur',
-    'Lamjung',
-    'Mahottari',
-    'Makwanpur',
-    'Manang',
-    'Morang',
-    'Mugu',
-    'Mustang',
-    'Myagdi',
-    'Nawalpur',
-    'Nuwakot',
-    'Okhaldhunga',
-    'Palpa',
-    'Panchthar',
-    'Parasi',
-    'Parbat',
-    'Parsa',
-    'Pyuthan',
-    'Ramechhap',
-    'Rasuwa',
-    'Rautahat',
-    'Rolpa',
-    'Rukum',
-    'Rupandehi',
-    'Salyan',
-    'Sankhuwasabha',
-    'Saptari',
-    'Sarlahi',
-    'Sindhuli',
-    'Sindhupalchok',
-    'Siraha',
-    'Solukhumbu',
-    'Sunsari',
-    'Surkhet',
-    'Syangja',
-    'Tanahun',
-    'Taplejung',
-    'Tehrathum',
-    'Udayapur'
-  ];
-
+class _forYouPostsState extends State<forYouPosts> {
   final Stream<QuerySnapshot> allPost =
       FirebaseFirestore.instance.collection('Post').snapshots();
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      // ignore: non_constant_identifier_names
+      loggedInUser = UserModel.fromMap(value.data()!);
+      //after long i found this solution but this does not work for me
+      //  loggedInUser  = UserModel.fromMap(value.data().cast<String, dynamic>());
+
+      setState(() {});
+    });
+  }
 
   // // For Deleting User..............................................................................................
   // CollectionReference posts =
@@ -148,53 +87,10 @@ class _searchPostState extends State<searchPost> {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
-                    Container(
-                        width: MediaQuery.of(context).size.width * 0.30,
-                        height: 40,
-                        padding: const EdgeInsets.all(10),
-                        child: Center(
-                            child: Text('select district',
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.7),
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold)))),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: 40,
-                      padding: const EdgeInsets.all(1.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        border: Border.all(
-                            color: Colors.grey,
-                            style: BorderStyle.solid,
-                            width: 0.30),
-                      ),
-                      //dropdown
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          elevation: 0,
-                          value: selectedDistrict,
-                          //problem
-                          //The argument type 'List<dynamic>' can't be assigned to the parameter type 'List<DropdownMenuItem<String>>?'.
-                          //so we have to use dynamic
-                          //here distri
-                          items: districts.map((String districts) {
-                            return DropdownMenuItem(
-                              value: districts,
-                              child: Text(districts),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedDistrict = newValue!;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
                     for (var i = 0; i < storedocs.length; i++)
-                      if (district[i] == selectedDistrict)
-                        SizedBox(
+                      if (district[i] == loggedInUser.district)
+                        // ignore: sized_box_for_whitespace
+                        Container(
                           width: double.infinity,
                           child: Card(
                             margin: const EdgeInsets.symmetric(

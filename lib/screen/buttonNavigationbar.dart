@@ -23,7 +23,7 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
   //pages list for the bottom navigation bar
   List pages = [
     const HomeScreen(),
-    const SearchScreen(),
+    const searchPost(),
     const PostScreen(),
     const NotificationScreen(),
     allPosts(),
