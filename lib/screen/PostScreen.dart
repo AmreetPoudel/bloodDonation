@@ -15,7 +15,7 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
-  final _auth = FirebaseAuth.instance;
+  // final _auth = FirebaseAuth.instance;
   String? requiredDistrict;
   String? requiredBloodGroup;
   User? user = FirebaseAuth.instance.currentUser;
@@ -352,7 +352,4 @@ class _PostScreenState extends State<PostScreen> {
           ),
         ));
   }
-
-  //posting the data to firestore
-
 }

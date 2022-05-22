@@ -26,8 +26,8 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
     const searchPost(),
     const PostScreen(),
     const NotificationScreen(),
-    allPosts(),
-    // Profile(),
+    // allPosts(),
+    const Profile(),
     // ProfileScreen()
   ];
   //ontap function for button navigation bar

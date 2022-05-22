@@ -3,6 +3,8 @@ import 'package:blood/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // ignore: camel_case_types
 class forYouPosts extends StatefulWidget {
@@ -129,13 +131,37 @@ class _forYouPostsState extends State<forYouPosts> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text(
-                                  'phone Number: ${phoneNo[i]}',
-                                  style: TextStyle(
-                                    color: Colors.red.shade500,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'phone Number: ${phoneNo[i]}',
+                                      style: TextStyle(
+                                        color: Colors.red.shade500,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    //icon to call the number
+                                    // IconButton(onPressed: ()async{
+                                    //   launch('tel:${phoneNo[i]}');
+                                    // }, icon: Icon(Icons.call), color: Colors.red.shade500,),
+                                    //this process doesnt worked so tried this one
+                                    const SizedBox(width: 0),
+                                    // ElevatedButton(
+                                    //     onPressed: () async {
+                                    //
+                                    //     },
+                                    //     child:
+                                    IconButton(
+                                        icon: const FaIcon(
+                                          FontAwesomeIcons.phone,
+                                          color: Colors.lightBlueAccent,
+                                        ),
+                                        onPressed: () async {
+                                          await FlutterPhoneDirectCaller
+                                              .callNumber(phoneNo[i]);
+                                        }),
+                                  ],
                                 ),
                               ],
                             ),
