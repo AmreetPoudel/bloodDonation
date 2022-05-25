@@ -14,6 +14,7 @@ class forYouPosts extends StatefulWidget {
   _forYouPostsState createState() => _forYouPostsState();
 }
 
+// ignore: camel_case_types
 class _forYouPostsState extends State<forYouPosts> {
   final Stream<QuerySnapshot> allPost =
       FirebaseFirestore.instance.collection('Post').snapshots();

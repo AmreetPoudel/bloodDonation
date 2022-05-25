@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import "package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 // ignore: camel_case_types
 class allFeedPosts extends StatefulWidget {
@@ -72,13 +73,15 @@ class _allFeedPostsState extends State<allFeedPosts> {
             item['uid'] = document.id;
             // print(storedocs);
           }).toList();
+
           //here we have all items in the list i.e all blood group on bloodgroup and similarly for district post and phone number
           //tried this because if kei add garnu paryo vane simply copy garara thorai change garda hunxa
-
+          List uid = storedocs.map((item) => item['uid']).toList();
           List bloodGroup = storedocs.map((i) => i['bloodGroup']).toList();
           List district = storedocs.map((i) => i['district']).toList();
           List post = storedocs.map((i) => i['post']).toList();
           List phoneNo = storedocs.map((i) => i['phoneNo']).toList();
+
           return SafeArea(
             child: Container(
               height: MediaQuery.of(context).size.height,
@@ -115,6 +118,13 @@ class _allFeedPostsState extends State<allFeedPosts> {
                                 style: TextStyle(
                                   color: Colors.red.shade500,
                                   fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'uid: ${uid[i]}',
+                                style: const TextStyle(
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

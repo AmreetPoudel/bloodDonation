@@ -49,11 +49,12 @@ class _allPostsState extends State<allPosts> {
           }).toList();
           //here we have all items in the list i.e all blood group on bloodgroup and similarly for district post and phone number
           //tried this because if kei add garnu paryo vane simply copy garara thorai change garda hunxa
-
+          List uid = storedocs.map((item) => item['uid']).toList();
           List bloodGroup = storedocs.map((i) => i['bloodGroup']).toList();
           List district = storedocs.map((i) => i['district']).toList();
           List post = storedocs.map((i) => i['post']).toList();
           List phoneNo = storedocs.map((i) => i['phoneNo']).toList();
+          // print(uid);
           return SafeArea(
             child: Container(
               height: MediaQuery.of(context).size.height,
@@ -93,6 +94,13 @@ class _allPostsState extends State<allPosts> {
                               ),
                               Text(
                                 'district: ${district[i]}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'uid: ${uid[i]}',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,

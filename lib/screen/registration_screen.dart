@@ -4,7 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+
 import "/model/user_model.dart";
+// import 'package:http/http.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -14,6 +17,11 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
   final _auth = FirebaseAuth.instance;
   //form key
   final _formkey = GlobalKey<FormState>();
@@ -110,6 +118,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //this is for the notification onesignal setup from onesignal official documentation
+
 //first name
 
     final firstName = TextFormField(
@@ -449,6 +459,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   postDetailsToFirestore() async {
+    //these first two lines are for initializing the oneSignal token id
+    // var status = await OneSignal.shared.getDeviceState();
+    // var tokenId = await OneSignal.shared.getPermissionSubscriptionState();
+
+// var tokenId = OneSignal.getDeviceState().then((value) => {
+
+//   var deviceInfo= JSON.stringify(value);
+//   console.log(deviceInfo.userId)
+// // });
+    final status = await OneSignal.shared.getDeviceState();
+    final String? userId = status?.userId;
+
     //calling firebase
     //calling user model
     //sending data to firebase
@@ -456,6 +478,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     User? user = _auth.currentUser;
 
     UserModel userModel = UserModel();
+    // OneSignal.endInit();
 
     //writing all the values to constructor of user model so that we can send them to firebase
     userModel.email = user!.email;
@@ -464,6 +487,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     userModel.uid = user.uid;
     userModel.district = selectedDistrict;
     userModel.bloodType = selectedBloodGroup;
+    userModel.tokenId = userId;
+    userModel.Password = passwordEditingContoller.text;
 
     //
     await firebaseFirestore
@@ -483,5 +508,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         context,
         MaterialPageRoute(builder: (context) => const ButtonNavigation()),
         (Route<dynamic> route) => false);
+  }
+
+  Future<void> initPlatformState() async {
+    OneSignal.shared.setAppId("6c6a3a20-d3a7-4dea-b5ab-e4a47e61016d");
   }
 }

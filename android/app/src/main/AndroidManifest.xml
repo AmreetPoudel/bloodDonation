@@ -5,6 +5,8 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
@@ -30,5 +32,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data   
+           android:name="com.google.firebase.messaging.default_notification_channel_id"
+           android:value="mychanel"
+           />
     </application>
 </manifest>

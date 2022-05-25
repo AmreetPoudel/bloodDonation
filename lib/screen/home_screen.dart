@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const HomeScreen(),
     const searchPost(),
     const PostScreen(),
-    const NotificationScreen(),
+    notificationpage(),
     const ProfileScreen(),
   ];
   // ontap function for button navigation bar
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // print('Something went Wrong');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => forYouPosts(),
+                  builder: (context) => const forYouPosts(),
                 ),
               ),
               //posts from same district + notification
@@ -219,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => allFeedPosts(),
+                  builder: (context) => const allFeedPosts(),
                 ),
               ),
 

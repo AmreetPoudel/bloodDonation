@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return Center(
             child: Text(
               "Error: ${snapshot.error}",
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.red,
                 fontSize: 20,
               ),
@@ -209,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
         }
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       },
     );
   }

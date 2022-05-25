@@ -5,8 +5,8 @@ class UserModel {
   String? lastName;
   String? district;
   String? bloodType;
-  String? requiredDistrict;
-  String? requiredBloodType;
+  String? tokenId;
+  String? Password;
 
   UserModel(
       {this.uid,
@@ -15,8 +15,8 @@ class UserModel {
       this.lastName,
       this.district,
       this.bloodType,
-      this.requiredDistrict,
-      this.requiredBloodType});
+      this.tokenId,
+      this.Password});
 
   //takeing data from server
   UserModel.fromMap(Map<String, dynamic> map) {
@@ -26,8 +26,8 @@ class UserModel {
     lastName = map['lastName'];
     district = map['district'];
     bloodType = map['bloodType'];
-    requiredDistrict = map['requiredDistrict'];
-    requiredBloodType = map['requiredBloodType'];
+    Password = map['Password'];
+    tokenId = map['tokenId'];
   }
 
   //sending data to our server
@@ -40,8 +40,8 @@ class UserModel {
       'lastName': lastName,
       'district': district,
       'bloodType': bloodType,
-      'requiredDistrict': requiredDistrict,
-      'requiredBloodType': requiredBloodType,
+      'tokenId': tokenId,
+      'Password': Password
     };
   }
 }

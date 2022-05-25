@@ -1,3 +1,4 @@
+// ignore: file_names
 //for image upload we will direct use packages which includes image picker and for storage we will use
 // firebase storage
 
@@ -34,7 +35,7 @@ class _ImageUploadState extends State<ImageUpload> {
       if (pick != null) {
         _image = File(pick.path);
       } else {
-        showSnackBar("No File selected", Duration(milliseconds: 400));
+        showSnackBar("No File selected", const Duration(milliseconds: 400));
       }
     });
   }
@@ -57,7 +58,7 @@ class _ImageUploadState extends State<ImageUpload> {
         .doc(widget.userId)
         .collection("images")
         .add({'downloadURL': downloadURL}).whenComplete(
-            () => showSnackBar("Image Uploaded", Duration(seconds: 2)));
+            () => showSnackBar("Image Uploaded", const Duration(seconds: 2)));
   }
 
   @override
@@ -108,7 +109,7 @@ class _ImageUploadState extends State<ImageUpload> {
                                         uploadImage(_image!);
                                       } else {
                                         showSnackBar("Select Image first",
-                                            Duration(milliseconds: 400));
+                                            const Duration(milliseconds: 400));
                                       }
                                     },
                                     child: const Text("Upload Image")),
