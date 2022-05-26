@@ -5,7 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'buttonNavigationbar.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,14 +20,38 @@ class _LoginScreenState extends State<LoginScreen> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   //form key is used in validation of form it is global key with type formstate
   final _formKey = GlobalKey<FormState>();
-
+  bool isChecked = false;
   //as per design we should have username and password field so to control those two fields we make 2 textediting
   //controller when the text field changes/updates the values then to retrive the text written by user on  those
   //field we use controller
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  late Box box1;
   final _auth = FirebaseAuth.instance; //firebase auth instance
+
+  @override
+  void initState() {
+    super.initState();
+    createBox();
+  }
+
+  void createBox() async {
+    box1 = await Hive.openBox('logindata');
+    getdata();
+  }
+
+  void getdata() async {
+    if (box1.get('email') != null) {
+      emailController.text = box1.get('email');
+      isChecked = true;
+      setState(() {});
+    }
+    if (box1.get('password') != null) {
+      passwordController.text = box1.get('password');
+      isChecked = true;
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Container(
                   color: Colors.white,
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -171,7 +196,37 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           passwordField,
                           const SizedBox(
-                            height: 25,
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.1,
+                              ),
+                              const Text(
+                                "Remember Me",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 99, 168, 21)),
+                              ),
+                              Checkbox(
+                                value: isChecked,
+                                onChanged: (value) {
+                                  isChecked = !isChecked;
+                                  setState(() {});
+                                },
+                              ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Text(
+                              "Forgot Password ? Reset Now",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 0,
                           ),
                           loginButton,
                           const SizedBox(
@@ -272,19 +327,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 16.0),
                   }
               });
-    }
-  }
 
-  // Fluttertoast.showToast(
-  //     msg: e!.message,
-  //     toastLength: Toast.LENGTH_SHORT,
-  //     gravity: ToastGravity.BOTTOM,
-  //     timeInSecForIosWeb: 1,
-  //     backgroundColor: Colors.redAccent,
-  //     textColor: Colors.white,
+      if (isChecked) {
+        box1.put("email", emailController.text);
+        box1.put("password", passwordController.text);
+      }
+    }
+
+    // Fluttertoast.showToast(
+    //     msg: e!.message,
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.BOTTOM,
+    //     timeInSecForIosWeb: 1,
+    //     backgroundColor: Colors.redAccent,
+    //     textColor: Colors.white,
 //                 //     fontSize: 16.0),
 //               });
 //     }
 //   }
 // }}
+  }
 }
