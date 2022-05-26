@@ -75,6 +75,9 @@ class _PostScreenState extends State<PostScreen> {
     });
   }
 
+  final allUserLoginCredentials =
+      FirebaseFirestore.instance.collection('users').snapshots();
+
   // final _auth = FirebaseAuth.instance;
   String? requiredDistrict;
   String? requiredBloodGroup;
@@ -210,6 +213,7 @@ class _PostScreenState extends State<PostScreen> {
           'bloodGroup': requiredBloodGroup,
           "phoneNo": phoneEditingController.text,
           'uid': user!.uid,
+          'tokenId': loggedInUser.tokenId,
           //onesignal token id
         })
         .then((value) => {
@@ -258,11 +262,11 @@ class _PostScreenState extends State<PostScreen> {
         }).toList();
         //here we have all items in the list i.e all blood group on bloodgroup and similarly for district post and phone number
         //tried this because if kei add garnu paryo vane simply copy garara thorai change garda hunxa
-        // List uid = storedocs.map((item) => item['uid']).toList();
+        List uid = storedocs.map((item) => item['uid']).toList();
         List bloodGroup = storedocs.map((i) => i['bloodGroup']).toList();
         List district = storedocs.map((i) => i['district']).toList();
-        // List post = storedocs.map((i) => i['post']).toList();
-        // List phoneNo = storedocs.map((i) => i['phoneNo']).toList();
+        List post = storedocs.map((i) => i['post']).toList();
+        List phoneNo = storedocs.map((i) => i['phoneNo']).toList();
         List tokenId = storedocs.map((i) => i['tokenId']).toList();
 
         loggedInUser.uid = user!.uid;

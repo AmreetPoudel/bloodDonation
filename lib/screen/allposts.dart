@@ -54,6 +54,7 @@ class _allPostsState extends State<allPosts> {
           List district = storedocs.map((i) => i['district']).toList();
           List post = storedocs.map((i) => i['post']).toList();
           List phoneNo = storedocs.map((i) => i['phoneNo']).toList();
+          List tokenId = storedocs.map((i) => i['tokenId']).toList();
           // print(uid);
           return SafeArea(
             child: Container(
@@ -101,6 +102,13 @@ class _allPostsState extends State<allPosts> {
                               ),
                               Text(
                                 'uid: ${uid[i]}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'tokenId: ${tokenId[i]}',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,

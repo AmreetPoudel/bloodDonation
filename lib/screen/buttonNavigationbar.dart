@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types
 
 import 'package:blood/screen/home_screen.dart';
+import 'package:blood/screen/notificationTest.dart';
 import 'package:blood/screen/testscreen.dart';
 import 'package:flutter/material.dart';
 import 'NotificationScreen.dart';
@@ -22,7 +23,8 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
     const HomeScreen(),
     const searchPost(),
     const PostScreen(),
-    notificationpage(),
+    // notificationpage(),
+    notificationScreen(),
     // allPosts(),
     const Profile(),
     // ProfileScreen()
