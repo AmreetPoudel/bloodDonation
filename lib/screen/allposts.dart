@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -68,6 +70,7 @@ class _allPostsState extends State<allPosts> {
                 child: Column(
                   children: [
                     for (var i = 0; i < storedocs.length; i++)
+                      // ignore: sized_box_for_whitespace
                       Container(
                         width: double.infinity,
                         child: Card(

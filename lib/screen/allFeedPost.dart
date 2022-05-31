@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import "package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 // ignore: camel_case_types
 class allFeedPosts extends StatefulWidget {

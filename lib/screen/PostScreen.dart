@@ -1,6 +1,8 @@
 //this is post screen and in this screen we have large text area with and three buttons one for post one for cancel
 // and one for upload image
 
+// ignore_for_file: avoid_print, unused_local_variable, file_names
+
 // ignore: file_names
 import 'dart:convert';
 import 'dart:async';
@@ -291,6 +293,7 @@ class _PostScreenState extends State<PostScreen> {
 
         void checkdata() {
           print(tokenId);
+          // ignore: avoid_print
           print(district);
           print(bloodGroup);
         }

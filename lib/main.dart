@@ -2,9 +2,6 @@ import 'package:blood/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-// import 'package:overlay_support/overlay_support.dart';
-//for local save login credentials
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {

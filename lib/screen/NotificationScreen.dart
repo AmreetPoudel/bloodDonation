@@ -1,9 +1,12 @@
+// ignore: file_names
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+// ignore: camel_case_types
 class notificationpage extends StatefulWidget {
-  notificationpage({Key? key}) : super(key: key);
+  const notificationpage({Key? key}) : super(key: key);
 
   @override
   State<notificationpage> createState() => _notificationpageState();

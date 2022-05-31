@@ -33,7 +33,6 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  final _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

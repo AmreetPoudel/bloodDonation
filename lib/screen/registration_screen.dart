@@ -17,6 +17,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  @override
   void initState() {
     super.initState();
     initPlatformState();
@@ -137,6 +138,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         if (!regex.hasMatch(value)) {
           return " atleast 3 characters long";
         }
+        return null;
       },
       autofocus: false,
       decoration: InputDecoration(
@@ -232,6 +234,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         if (!regex.hasMatch(value)) {
           return " atleast 6 characters long";
         }
+        return null;
       },
       decoration: InputDecoration(
           hintText: "Password",
