@@ -1,6 +1,7 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors
-
 import 'package:blood/screen/home_screen.dart';
+//import font awasome
+
+import 'package:blood/screen/lobby.dart';
 import 'package:blood/screen/notificationTest.dart';
 import 'package:blood/screen/testscreen.dart';
 import 'package:blood/screen/videocall.dart';
@@ -24,9 +25,10 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
     const HomeScreen(),
     const searchPost(),
     const PostScreen(),
+    const lobby(),
     // notificationpage(),
     // notificationScreen(),
-    videoCall(),
+
     // allPosts(),
     const Profile(),
     // ProfileScreen()
@@ -89,10 +91,10 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
                 label: "Request"),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.circle_notifications,
+                Icons.video_call,
                 size: 25,
               ),
-              label: 'notification',
+              label: 'Lobby',
             ),
             BottomNavigationBarItem(
               icon: Icon(

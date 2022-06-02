@@ -35,6 +35,10 @@ dependencies:
   agora_rtc_engine: ^5.2.0
   permission_handler: 9.2.0
   loader_overlay: ^2.0.0
+  uuid: ^3.0.6
+  share: ^2.0.4
+  get: ^4.6.5
+  agora_uikit: ^1.0.1
   # firebase_messaging: ^11.4.0
   # overlay_support: ^2.0.0
 

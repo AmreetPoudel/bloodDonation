@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const HomeScreen(),
     const searchPost(),
     const PostScreen(),
-    notificationpage(),
+    const notificationpage(),
     const ProfileScreen(),
   ];
   // ontap function for button navigation bar
@@ -70,8 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
           List district = storedocs.map((i) => i['district']).toList();
           List post = storedocs.map((i) => i['post']).toList();
           List phoneNo = storedocs.map((i) => i['phoneNo']).toList();
-
-
 
 //topmost button inspired from tiktok for the posts from same district
           final forYou = TextButton(
