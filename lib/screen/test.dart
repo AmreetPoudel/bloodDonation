@@ -1,26 +1,27 @@
-// ignore: file_names
 import 'package:blood/model/user_model.dart';
+import 'package:blood/screen/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-// import "package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart";
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// ignore: camel_case_types
-class allFeedPosts extends StatefulWidget {
-  const allFeedPosts({Key? key}) : super(key: key);
+import '../imageUpload/uploadImage.dart';
 
+class ProfileScreen extends StatefulWidget {
   @override
-  _allFeedPostsState createState() => _allFeedPostsState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-// ignore: camel_case_types
-class _allFeedPostsState extends State<allFeedPosts> {
+class _ProfileScreenState extends State<ProfileScreen> {
   final Stream<QuerySnapshot> allPost =
       FirebaseFirestore.instance.collection('Post').snapshots();
+
+  final Stream<QuerySnapshot> allimages =
+      FirebaseFirestore.instance.collection('Post').snapshots();
+
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
+
+  String? get userId => null;
 
   @override
   void initState() {
@@ -32,11 +33,15 @@ class _allFeedPostsState extends State<allFeedPosts> {
         .then((value) {
       // ignore: non_constant_identifier_names
       loggedInUser = UserModel.fromMap(value.data()!);
-      //after long i found this solution but this does not work for me
-      //  loggedInUser  = UserModel.fromMap(value.data().cast<String, dynamic>());
 
       setState(() {});
     });
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   @override
@@ -61,27 +66,87 @@ class _allFeedPostsState extends State<allFeedPosts> {
             item['uid'] = document.id;
             // print(storedocs);
           }).toList();
-          //here we have all items in the list i.e all blood group on bloodgroup and similarly for district post and phone number
-          //tried this because if kei add garnu paryo vane simply copy garara thorai change garda hunxa
-          List uid = storedocs.map((item) => item['uid']).toList();
-          List district = storedocs.map((item) => item['district']).toList();
+
           List bloodGroup = storedocs.map((i) => i['bloodGroup']).toList();
-          List tokenId = storedocs.map((i) => i['tokenId']).toList();
-          //finding uid of current logged in user
-          loggedInUser.uid = user!.uid;
-          loggedInUser.district = loggedInUser.district;
-          district.remove(loggedInUser.district);
-          uid.remove(loggedInUser.uid);
-          List finaltokenId = [];
-          // final currentUserUid = loggedInUser.uid;
-          for (var i = 0; i < storedocs.length; i++) {
-            if (district[i] == loggedInUser.district) {
-              if (bloodGroup[i] == loggedInUser.bloodType) {
-                finaltokenId.add(tokenId[i]);
-              }
-            }
-          }
-          return const MaterialApp();
+          List district = storedocs.map((i) => i['district']).toList();
+          List post = storedocs.map((i) => i['post']).toList();
+          List phoneNo = storedocs.map((i) => i['phoneNo']).toList();
+
+          double width = MediaQuery.of(context).size.width;
+          double height = MediaQuery.of(context).size.height;
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 104, 113, 160),
+                      Color.fromARGB(255, 189, 8, 8),
+                    ],
+                    begin: FractionalOffset.bottomCenter,
+                    end: FractionalOffset.topCenter,
+                  ),
+                ),
+              ),
+              Scaffold(
+                backgroundColor: Colors.transparent,
+                body: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 73),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: height * 0.43,
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              double innerHeight = constraints.maxHeight;
+                              double innerWidth = constraints.maxWidth;
+                              return Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  StreamBuilder(
+                                    stream: FirebaseFirestore.instance
+                                        .collection("users")
+                                        .doc(userId)
+                                        .collection("images")
+                                        .snapshots(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return (const Center(
+                                            child: Text("No Images Found")));
+                                      } else {
+                                        return ListView.builder(
+                                          itemCount: snapshot.data!.docs.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            String url = snapshot.data!
+                                                .docs[index]['downloadURL'];
+                                            return Image.network(
+                                              url,
+                                              height: 300,
+                                              fit: BoxFit.fitWidth,
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
         });
   }
 }

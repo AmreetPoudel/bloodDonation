@@ -47,30 +47,6 @@ class _ProfileState extends State<Profile> {
                   fit: BoxFit.cover,
                   image: const AssetImage('assets/blood.jpg'),
                 ),
-                Positioned(
-                    bottom: -50.0,
-                    child: CircleAvatar(
-                      radius: 80,
-                      backgroundColor: Colors.black,
-                      child: CircleAvatar(
-                        radius: 77,
-                        backgroundImage: const AssetImage('assets/blood.jpg'),
-                        child: Align(
-                            alignment: Alignment(2, 0.9),
-                            child: RawMaterialButton(
-                              onPressed: () {},
-                              elevation: 2.0,
-                              fillColor: Colors.black,
-                              child: Icon(
-                                Icons.camera_alt,
-                                size: 15.0,
-                              ),
-                              padding: EdgeInsets.all(11.0),
-                              shape: CircleBorder(),
-                            )),
-                        //add camera button on circlar avatar to change profile picture
-                      ),
-                    ))
               ]),
           SizedBox(
             height: 45,
