@@ -64,15 +64,20 @@ class _notificationScreenState extends State<notificationScreen> {
 
         void sendnotification() {
           OSCreateNotification(
-              playerIds: [tokenId.toString()],
-              content: "this is a test from OneSignal's Flutter SDK",
-              heading: "Test Notification",
-              // iosAttachments: {"id1": imgUrlString},
-              // bigPicture: imgUrlString,
-              buttons: [
-                OSActionButton(text: "test1", id: "id1"),
-                OSActionButton(text: "test2", id: "id2")
-              ]);
+            playerIds: [tokenId.toString()],
+            content: "this is a test from OneSignal's Flutter SDK",
+            heading: "Test Notification",
+
+            //we didnot implemented all this functionality because push notification was giving problem
+            //test notification is done but from app itself is not happening but i dont know how and why
+
+            // iosAttachments: {"id1": imgUrlString},
+            // bigPicture: imgUrlString,
+            // buttons: [
+            //   OSActionButton(text: "test1", id: "id1"),
+            //   OSActionButton(text: "test2", id: "id2")
+            // ]
+          );
 
           // var response = await OneSignal.shared.postNotification(notification);
         }

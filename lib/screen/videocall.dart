@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class VideoCall extends StatefulWidget {
-  String channelName = "test";
+  String channelName = "";
 
   VideoCall({required this.channelName});
   @override
@@ -33,12 +33,12 @@ class _VideoCallState extends State<VideoCall> {
     });
     _client = AgoraClient(
         agoraConnectionData: AgoraConnectionData(
-          appId: "843077704d2f4d19a7ed336afaa0c2ca",
+          appId: "53f6b7dab5184af68f967695b2355259",
           tempToken: tempToken,
           channelName: widget.channelName,
         ),
         enabledPermission: [Permission.camera, Permission.microphone]);
-    Future.delayed(Duration(seconds: 1)).then(
+    Future.delayed(Duration(milliseconds: 1)).then(
       (value) => setState(() => _loading = false),
     );
   }

@@ -29,7 +29,7 @@ class JoinWithCode extends StatelessWidget {
             const SizedBox(height: 20),
             const Text(
               "Enter meeting code below",
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),

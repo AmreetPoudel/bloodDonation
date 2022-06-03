@@ -2,7 +2,6 @@ import 'package:blood/screen/home_screen.dart';
 //import font awasome
 
 import 'package:blood/screen/lobby.dart';
-import 'package:blood/screen/notificationTest.dart';
 import 'package:blood/screen/testscreen.dart';
 import 'package:blood/screen/videocall.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'NotificationScreen.dart';
 import 'PostScreen.dart';
 // import 'ProfileScreen.dart';
 import 'SearchScreen.dart';
+import 'profile.dart';
 import 'testscreen.dart';
 
 class ButtonNavigation extends StatefulWidget {
@@ -30,8 +30,8 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
     // notificationScreen(),
 
     // allPosts(),
-    const Profile(),
-    // ProfileScreen()
+    // const Profile(),
+    ProfileScreen()
   ];
   //ontap function for button navigation bar
   //defining routes for the bottom navigation bar
