@@ -8,6 +8,8 @@ import 'NotificationScreen.dart';
 import 'PostScreen.dart';
 import 'ProfileScreen.dart';
 import 'SearchScreen.dart';
+import "package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart";
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -101,23 +103,95 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: const Text('allfeed'),
           );
-          return Scaffold(
-            // appBar: AppBar(
-            //   title: const Text("blood donation"),
-            //   centerTitle: true,
-            // ),
-            body: Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
+          return SafeArea(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+              padding: const EdgeInsets.all(5),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 child: Column(
-                  children: <Widget>[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          forYou,
-                          allFeed,
-                        ]),
+                  children: [
+                    for (var i = 0; i < storedocs.length; i++)
+
+                      // ignore: sized_box_for_whitespace
+                      Container(
+                        width: double.infinity,
+                        child: Card(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 5.0, vertical: 11.0),
+                          elevation: 7,
+                          shadowColor: Colors.red,
+                          borderOnForeground: true,
+                          // width: double.infinity,
+                          clipBehavior: Clip.antiAlias,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Column(
+                            textDirection: TextDirection.rtl,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Text(
+                                'blood group: ${bloodGroup[i]}',
+                                style: TextStyle(
+                                  color: Colors.red.shade500,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'district: ${district[i]}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'request: ${post[i]}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'phone Number: ${phoneNo[i]}',
+                                    style: TextStyle(
+                                      color: Colors.red.shade500,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  //icon to call the number
+                                  // IconButton(onPressed: ()async{
+                                  //   launch('tel:${phoneNo[i]}');
+                                  // }, icon: Icon(Icons.call), color: Colors.red.shade500,),
+                                  //this process doesnt worked so tried this one
+                                  const SizedBox(width: 75),
+                                  // ElevatedButton(
+                                  //     onPressed: () async {
+                                  //
+                                  //     },
+                                  //     child:
+                                  IconButton(
+                                      icon: const FaIcon(
+                                        FontAwesomeIcons.phone,
+                                        color: Colors.lightBlueAccent,
+                                      ),
+                                      onPressed: () async {
+                                        await FlutterPhoneDirectCaller
+                                            .callNumber(phoneNo[i]);
+                                      }),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'updatedetails.dart';
 
 import '../imageUpload/uploadImage.dart';
@@ -101,17 +102,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         horizontal: 16, vertical: 73),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                        Column(
                           children: [
-                            InkWell(
-                              child: const Icon(
-                                AntDesign.logout,
-                                color: Colors.white,
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: InkWell(
+                                child: const Icon(
+                                  AntDesign.logout,
+                                  color: Colors.white,
+                                ),
+                                onTap: () {
+                                  logout(context);
+                                },
                               ),
-                              onTap: () {
-                                logout(context);
-                              },
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: InkWell(
+                                child: const Icon(
+                                  AntDesign.setting,
+                                  color: Colors.white,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Updateuser(
+                                        id: user!.uid,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),
@@ -148,8 +173,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       width: innerWidth,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
-                                        color:
-                                            Color.fromARGB(255, 221, 214, 214),
+                                        color: const Color.fromARGB(
+                                            255, 221, 214, 214),
                                       ),
                                       child: Column(
                                         children: [
@@ -258,26 +283,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                   ),
-                                  Positioned(
-                                    top: 110,
-                                    right: 20,
-                                    child: InkWell(
-                                      child: Icon(
-                                        AntDesign.setting,
-                                        color: Colors.grey[700],
-                                        size: 30,
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                Updateuser(id: user!.uid),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
                                   StreamBuilder(
                                     stream: FirebaseFirestore.instance
                                         .collection("users")
@@ -290,27 +295,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         return Positioned(
                                             bottom: 150.0,
                                             child: CircleAvatar(
-                                              radius: 80,
-                                              backgroundColor: Colors.black,
+                                              radius: 70,
+                                              backgroundColor:
+                                                  Colors.blueGrey[600],
                                               child: CircleAvatar(
-                                                radius: 77,
+                                                radius: 67,
                                                 backgroundImage:
                                                     const AssetImage(
                                                         'assets/blood.jpg'),
                                                 child: Align(
                                                     alignment:
-                                                        Alignment(2, 0.9),
+                                                        const Alignment(2, 0.9),
                                                     child: RawMaterialButton(
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ImageUpload(
+                                                                    userId:
+                                                                        loggedInUser
+                                                                            .uid),
+                                                          ),
+                                                        );
+                                                      },
                                                       elevation: 2.0,
-                                                      fillColor: Colors.black,
-                                                      child: Icon(
+                                                      fillColor:
+                                                          Colors.blueGrey[600],
+                                                      child: const Icon(
                                                         Icons.camera_alt,
                                                         size: 15.0,
                                                       ),
                                                       padding:
-                                                          EdgeInsets.all(11.0),
-                                                      shape: CircleBorder(),
+                                                          const EdgeInsets.all(
+                                                              11.0),
+                                                      shape:
+                                                          const CircleBorder(),
                                                     )),
                                                 //add camera button on circlar avatar to change profile picture
                                               ),
@@ -329,17 +349,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         .width *
                                                     0.28,
                                                 child: CircleAvatar(
-                                                    radius: 80,
+                                                    radius: 70,
                                                     backgroundColor:
-                                                        Colors.black,
+                                                        Colors.blueGrey[600],
                                                     child: CircleAvatar(
-                                                      radius: 77,
+                                                      radius: 67,
                                                       backgroundImage:
                                                           NetworkImage(url),
-                                                      child: Align(
+                                                      child: const Align(
                                                         alignment:
-                                                            const Alignment(
-                                                                2, 0.9),
+                                                            Alignment(2, 0.9),
                                                       ),
                                                     )));
                                           },
