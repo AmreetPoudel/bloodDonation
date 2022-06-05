@@ -1,12 +1,13 @@
 import 'package:blood/model/user_model.dart';
 import 'package:blood/screen/allFeedPost.dart';
 import 'package:blood/screen/forYouPosts.dart';
+import 'package:blood/screen/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'NotificationScreen.dart';
 import 'PostScreen.dart';
-import 'ProfileScreen.dart';
+
 import 'SearchScreen.dart';
 import "package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,8 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
     const HomeScreen(),
     const searchPost(),
     const PostScreen(),
-    const notificationpage(),
-    const ProfileScreen(),
+    const notificationPage(),
+    ProfileScreen(),
   ];
   // ontap function for button navigation bar
   // defining routes for the bottom navigation bar
@@ -104,95 +105,166 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Text('allfeed'),
           );
           return SafeArea(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
-              padding: const EdgeInsets.all(5),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    for (var i = 0; i < storedocs.length; i++)
-
-                      // ignore: sized_box_for_whitespace
-                      Container(
-                        width: double.infinity,
-                        child: Card(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 5.0, vertical: 11.0),
-                          elevation: 7,
-                          shadowColor: Colors.red,
-                          borderOnForeground: true,
-                          // width: double.infinity,
-                          clipBehavior: Clip.antiAlias,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Column(
-                            textDirection: TextDirection.rtl,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Text(
-                                'blood group: ${bloodGroup[i]}',
-                                style: TextStyle(
-                                  color: Colors.red.shade500,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'district: ${district[i]}',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'request: ${post[i]}',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'phone Number: ${phoneNo[i]}',
-                                    style: TextStyle(
-                                      color: Colors.red.shade500,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  //icon to call the number
-                                  // IconButton(onPressed: ()async{
-                                  //   launch('tel:${phoneNo[i]}');
-                                  // }, icon: Icon(Icons.call), color: Colors.red.shade500,),
-                                  //this process doesnt worked so tried this one
-                                  const SizedBox(width: 75),
-                                  // ElevatedButton(
-                                  //     onPressed: () async {
-                                  //
-                                  //     },
-                                  //     child:
-                                  IconButton(
-                                      icon: const FaIcon(
-                                        FontAwesomeIcons.phone,
-                                        color: Colors.lightBlueAccent,
-                                      ),
-                                      onPressed: () async {
-                                        await FlutterPhoneDirectCaller
-                                            .callNumber(phoneNo[i]);
-                                      }),
-                                ],
-                              ),
-                            ],
+            child: Scaffold(
+              appBar: AppBar(
+                  backgroundColor: Color.fromARGB(255, 196, 68, 68),
+                  title: const Text('Blood Requests'),
+                  centerTitle: true,
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.notifications),
+                      onPressed: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const notificationPage(),
                           ),
                         ),
-                      ),
-                  ],
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.person),
+                      onPressed: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                          ),
+                        ),
+                      },
+                    ),
+                  ]),
+              body: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+                padding: const EdgeInsets.all(10),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      for (var i = 0; i < storedocs.length; i++)
+
+                        // ignore: sized_box_for_whitespace
+                        Container(
+                          width: double.infinity,
+                          child: Card(
+                            // color: Theme.of(context).colorScheme.surfaceVariant,
+                            color: Colors.green,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 5.0, vertical: 11.0),
+                            elevation: 7,
+                            shadowColor: Colors.red,
+                            borderOnForeground: true,
+                            // width: double.infinity,
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                textDirection: TextDirection.rtl,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'blood group: ${bloodGroup[i]}',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 141, 12, 3),
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Color.fromARGB(255, 141, 126, 125),
+                                    thickness: 1.0,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'district: ${district[i]}',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'request: ${post[i]}',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Color.fromARGB(255, 173, 157, 187),
+                                    thickness: 1.0,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      'request: ${post[i]}',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Contact: ${phoneNo[i]}',
+                                          style: TextStyle(
+                                            color: Colors.red.shade500,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      //icon to call the number
+                                      // IconButton(onPressed: ()async{
+                                      //   launch('tel:${phoneNo[i]}');
+                                      // }, icon: Icon(Icons.call), color: Colors.red.shade500,),
+                                      //this process doesnt worked so tried this one
+                                      const SizedBox(width: 75),
+                                      // ElevatedButton(
+                                      //     onPressed: () async {
+                                      //
+                                      //     },
+                                      //     child:
+                                      IconButton(
+                                          icon: const FaIcon(
+                                            FontAwesomeIcons.phone,
+                                            color: Colors.lightBlueAccent,
+                                          ),
+                                          onPressed: () async {
+                                            await FlutterPhoneDirectCaller
+                                                .callNumber(phoneNo[i]);
+                                          }),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),

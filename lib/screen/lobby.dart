@@ -1,7 +1,7 @@
 import 'package:blood/screen/joinwithCode.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'joinWithCode.dart' as joinWithCode;
+import 'joinwithCode.dart' as joinWithCode;
 import 'newMeeting.dart';
 // import 'package:get/get.dart';
 

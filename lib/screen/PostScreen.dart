@@ -90,6 +90,7 @@ class _PostScreenState extends State<PostScreen> {
       TextEditingController();
   final TextEditingController bloodEditingController = TextEditingController();
   final TextEditingController phoneEditingController = TextEditingController();
+  final TextEditingController streamEditingController = TextEditingController();
 
   var bloodtype = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
@@ -186,16 +187,19 @@ class _PostScreenState extends State<PostScreen> {
     postEditingController.clear();
     districtEditingController.clear();
     bloodEditingController.clear();
-    phoneEditingController
+    phoneEditingController.clear();
+    streamEditingController
         .clear(); //this is for clearing the text field after the post is done
   }
 
   String post = "";
   String phoneNumber = "";
+  String stream = "";
 
   setdata() {
     post = postEditingController.text;
     phoneNumber = phoneEditingController.text;
+    stream = streamEditingController.text;
   }
 
   //get all tokenId from firebase
@@ -216,6 +220,7 @@ class _PostScreenState extends State<PostScreen> {
           "phoneNo": phoneEditingController.text,
           'uid': user!.uid,
           'tokenId': loggedInUser.tokenId,
+          'stream': stream,
           //onesignal token id
         })
         .then((value) => {
@@ -270,6 +275,7 @@ class _PostScreenState extends State<PostScreen> {
         List post = storedocs.map((i) => i['post']).toList();
         List phoneNo = storedocs.map((i) => i['phoneNo']).toList();
         List tokenId = storedocs.map((i) => i['tokenId']).toList();
+        List stream = storedocs.map((i) => i['stream']).toList();
 
         loggedInUser.uid = user!.uid;
         // loggedInUser.district = loggedInUser.district;
@@ -404,29 +410,61 @@ class _PostScreenState extends State<PostScreen> {
                           height: 9,
                         ),
                         //,one button for upload image
-                        TextField(
-                          controller: phoneEditingController,
-                          decoration: const InputDecoration(
-                            hintText: 'phone Number',
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
+                        Row(
+                          children: [
+                            TextField(
+                              controller: phoneEditingController,
+                              decoration: const InputDecoration(
+                                hintText: 'phone Number',
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 20.0),
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.lightBlueAccent,
+                                      width: 1.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.lightBlueAccent,
+                                      width: 2.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                              ),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.lightBlueAccent, width: 1.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.lightBlueAccent, width: 2.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                            ),
-                          ),
+                            TextField(
+                              controller: streamEditingController,
+                              decoration: const InputDecoration(
+                                hintText: 'stream Id',
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 20.0),
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.lightBlueAccent,
+                                      width: 1.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.lightBlueAccent,
+                                      width: 2.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                         const SizedBox(
                           height: 10,

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'updatedetails.dart';
 
 import '../imageUpload/uploadImage.dart';
@@ -283,6 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                   ),
+                                  //
                                   StreamBuilder(
                                     stream: FirebaseFirestore.instance
                                         .collection("users")
@@ -293,7 +293,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         AsyncSnapshot<QuerySnapshot> snapshot) {
                                       if (!snapshot.hasData) {
                                         return Positioned(
+                                          bottom: 160.0,
+                                          left: 0,
+                                          right: 0,
+                                          child: Center(
+                                            child: _NoImageWidget(
+                                                loggedInUser: loggedInUser),
+                                          ),
+                                        );
+                                      } else {
+                                        final hasImage =
+                                            snapshot.data?.docs.isNotEmpty;
+
+                                        // String url = snapshot.data!
+                                        //     .docs[index]['downloadURL'];
+
+                                        if (hasImage ?? false) {
+                                          final url = snapshot.data!.docs.first
+                                              .get('downloadURL');
+
+                                          return Positioned(
                                             bottom: 150.0,
+                                            right: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.28,
                                             child: CircleAvatar(
                                               radius: 70,
                                               backgroundColor:
@@ -301,71 +325,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               child: CircleAvatar(
                                                 radius: 67,
                                                 backgroundImage:
-                                                    const AssetImage(
-                                                        'assets/blood.jpg'),
-                                                child: Align(
-                                                    alignment:
-                                                        const Alignment(2, 0.9),
-                                                    child: RawMaterialButton(
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ImageUpload(
-                                                                    userId:
-                                                                        loggedInUser
-                                                                            .uid),
-                                                          ),
-                                                        );
-                                                      },
-                                                      elevation: 2.0,
-                                                      fillColor:
-                                                          Colors.blueGrey[600],
-                                                      child: const Icon(
-                                                        Icons.camera_alt,
-                                                        size: 15.0,
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              11.0),
-                                                      shape:
-                                                          const CircleBorder(),
-                                                    )),
-                                                //add camera button on circlar avatar to change profile picture
+                                                    NetworkImage(url),
+                                                child: const Align(
+                                                  alignment: Alignment(2, 0.9),
+                                                ),
                                               ),
-                                            ));
-                                      } else {
-                                        return ListView.builder(
-                                          itemCount: snapshot.data!.docs.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            String url = snapshot.data!
-                                                .docs[index]['downloadURL'];
-                                            return Positioned(
-                                                bottom: 150.0,
-                                                right: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.28,
-                                                child: CircleAvatar(
-                                                    radius: 70,
-                                                    backgroundColor:
-                                                        Colors.blueGrey[600],
-                                                    child: CircleAvatar(
-                                                      radius: 67,
-                                                      backgroundImage:
-                                                          NetworkImage(url),
-                                                      child: const Align(
-                                                        alignment:
-                                                            Alignment(2, 0.9),
-                                                      ),
-                                                    )));
-                                          },
+                                            ),
+                                          );
+                                        }
+
+                                        return Positioned(
+                                          bottom: 160.0,
+                                          left: 0,
+                                          right: 0,
+                                          child: Center(
+                                            child: _NoImageWidget(
+                                                loggedInUser: loggedInUser),
+                                          ),
                                         );
                                       }
                                     },
-                                  )
+                                  ),
                                 ],
                               );
                             },
@@ -410,9 +390,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         Container(
                                           width: double.infinity,
                                           child: Card(
+                                            // color: Theme.of(context).colorScheme.surfaceVariant,
+                                            color: Colors.green,
                                             margin: const EdgeInsets.symmetric(
                                                 horizontal: 5.0,
-                                                vertical: 15.0),
+                                                vertical: 11.0),
                                             elevation: 7,
                                             shadowColor: Colors.red,
                                             borderOnForeground: true,
@@ -422,61 +404,124 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(10.0),
                                             ),
-                                            child: Column(
-                                              textDirection: TextDirection.rtl,
-                                              textBaseline:
-                                                  TextBaseline.alphabetic,
-                                              children: [
-                                                Text(
-                                                  'blood group: ${bloodGroup[i]}',
-                                                  style: TextStyle(
-                                                    color: Colors.red.shade500,
-                                                    fontSize: 18.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  'district: ${district[i]}',
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  'request: ${post[i]}',
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'phone Number: ${phoneNo[i]}',
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                textDirection:
+                                                    TextDirection.rtl,
+                                                textBaseline:
+                                                    TextBaseline.alphabetic,
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(
+                                                      'blood group: ${bloodGroup[i]}',
                                                       style: TextStyle(
-                                                        color:
-                                                            Colors.red.shade500,
+                                                        color: Color.fromARGB(
+                                                            255, 141, 12, 3),
                                                         fontSize: 18.0,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-                                                    const SizedBox(width: 0),
-                                                    IconButton(
-                                                        icon: const FaIcon(
-                                                          FontAwesomeIcons
-                                                              .phone,
-                                                          color: Colors
-                                                              .lightBlueAccent,
+                                                  ),
+                                                  Divider(
+                                                    color: Color.fromARGB(
+                                                        255, 141, 126, 125),
+                                                    thickness: 1.0,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(
+                                                      'district: ${district[i]}',
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(
+                                                      'request: ${post[i]}',
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Divider(
+                                                    color: Color.fromARGB(
+                                                        255, 173, 157, 187),
+                                                    thickness: 1.0,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(
+                                                      'request: ${post[i]}',
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Align(
+                                                        alignment:
+                                                            Alignment.topLeft,
+                                                        child: Text(
+                                                          'Contact: ${phoneNo[i]}',
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .red.shade500,
+                                                            fontSize: 18.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                         ),
-                                                        onPressed: () async {
-                                                          await FlutterPhoneDirectCaller
-                                                              .callNumber(
-                                                                  phoneNo[i]);
-                                                        }),
-                                                  ],
-                                                ),
-                                              ],
+                                                      ),
+                                                      //icon to call the number
+                                                      // IconButton(onPressed: ()async{
+                                                      //   launch('tel:${phoneNo[i]}');
+                                                      // }, icon: Icon(Icons.call), color: Colors.red.shade500,),
+                                                      //this process doesnt worked so tried this one
+                                                      const SizedBox(width: 75),
+                                                      // ElevatedButton(
+                                                      //     onPressed: () async {
+                                                      //
+                                                      //     },
+                                                      //     child:
+                                                      IconButton(
+                                                          icon: const FaIcon(
+                                                            FontAwesomeIcons
+                                                                .phone,
+                                                            color: Colors
+                                                                .lightBlueAccent,
+                                                          ),
+                                                          onPressed: () async {
+                                                            await FlutterPhoneDirectCaller
+                                                                .callNumber(
+                                                                    phoneNo[i]);
+                                                          }),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -494,5 +539,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           );
         });
+  }
+}
+
+class _NoImageWidget extends StatelessWidget {
+  const _NoImageWidget({
+    Key? key,
+    required this.loggedInUser,
+  }) : super(key: key);
+
+  final UserModel loggedInUser;
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: 70,
+      backgroundColor: Colors.blueGrey[600],
+      child: CircleAvatar(
+        radius: 67,
+        backgroundImage: const AssetImage('assets/blood.jpg'),
+        child: Align(
+            alignment: const Alignment(2, 0.9),
+            child: RawMaterialButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageUpload(userId: loggedInUser.uid),
+                  ),
+                );
+              },
+              elevation: 2.0,
+              fillColor: Colors.blueGrey[600],
+              child: const Icon(
+                Icons.camera_alt,
+                size: 15.0,
+              ),
+              padding: const EdgeInsets.all(11.0),
+              shape: const CircleBorder(),
+            )),
+        //add camera button on circlar avatar to change profile picture
+      ),
+    );
   }
 }
